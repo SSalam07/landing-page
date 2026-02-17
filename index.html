@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chandana Groups</title>
 
-
+<!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-
+<!-- Friendly Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -17,34 +17,40 @@ body{
     font-family:'Nunito', sans-serif;
 }
 
-
+/* Hero Section */
 .hero-section{
     background:linear-gradient(135deg,#2b1db6,#3a2ce0);
     border-radius:25px;
-    padding:70px 60px;
+    padding:70px;
     margin:60px auto;
     width:90%;
     color:white;
     box-shadow:0 20px 40px rgba(0,0,0,0.15);
 }
 
-
+/* Navbar */
 .nav-link{
     color:white !important;
     font-weight:500;
+    transition:0.3s;
 }
 .nav-link:hover{
-    opacity:0.8;
+    opacity:0.7;
 }
 
 .btn-purchase{
     background:#ff6b81;
     border:none;
-    border-radius:30px;
     padding:8px 20px;
+    border-radius:30px;
+    transition:0.3s;
+}
+.btn-purchase:hover{
+    background:#ff4d6d;
+    transform:translateY(-2px);
 }
 
-
+/* Hero Text */
 .hero-title{
     font-size:48px;
     font-weight:700;
@@ -54,8 +60,8 @@ body{
 .hero-text{
     margin-top:20px;
     font-size:16px;
-    max-width:480px;
     opacity:0.9;
+    max-width:480px;
 }
 
 .btn-learn{
@@ -63,17 +69,32 @@ body{
     border:none;
     border-radius:30px;
     padding:12px 26px;
-    margin-top:25px;
+    font-weight:600;
+    transition:0.3s;
+}
+.btn-learn:hover{
+    background:#ff4d6d;
+    transform:translateY(-3px);
 }
 
-
+/* Signup Card */
 .signup-card{
     background:white;
     border-radius:25px;
     padding:35px;
     box-shadow:0 15px 30px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+.signup-card:hover{
+    transform:translateY(-5px);
 }
 
+.signup-card h4{
+    font-weight:700;
+    margin-bottom:25px;
+}
+
+/* Inputs */
 .form-control{
     border-radius:30px;
     padding:12px 18px;
@@ -81,11 +102,22 @@ body{
     border:none;
 }
 
+.form-control:focus{
+    box-shadow:0 0 0 3px rgba(58,44,224,0.2);
+}
+
+/* Buttons */
 .btn-signin{
     background:#2b1db6;
     border:none;
     border-radius:30px;
     padding:12px;
+    font-weight:600;
+    transition:0.3s;
+}
+.btn-signin:hover{
+    background:#1e1290;
+    transform:translateY(-2px);
 }
 
 .btn-google{
@@ -93,13 +125,18 @@ body{
     border:none;
     border-radius:30px;
     padding:12px;
+    font-weight:600;
+    transition:0.3s;
+}
+.btn-google:hover{
+    transform:translateY(-2px);
 }
 
 .divider{
     text-align:center;
     margin:15px 0;
     font-size:13px;
-    color:#777;
+    color:#888;
 }
 
 .account{
@@ -114,49 +151,12 @@ body{
     text-decoration:none;
 }
 
-
-@media (max-width: 992px){
-    .hero-section{
-        padding:50px 40px;
-    }
-    .hero-title{
-        font-size:38px;
-    }
-}
-
-
-@media (max-width: 768px){
-    .hero-section{
-        padding:40px 25px;
-        text-align:center;
-    }
-
-    .hero-title{
-        font-size:30px;
-    }
-
-    .hero-text{
-        margin:15px auto;
-        font-size:14px;
-    }
-
-    .signup-card{
-        margin-top:30px;
-        padding:25px;
-    }
-
-    .navbar-nav{
-        text-align:center;
-        margin-top:15px;
-    }
-}
 </style>
 </head>
 
 <body>
 
 <div class="hero-section">
-
 
 <nav class="navbar navbar-expand-lg navbar-dark p-0">
 <div class="container-fluid p-0">
@@ -173,7 +173,7 @@ body{
 <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
 <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
 <li class="nav-item"><a class="nav-link" href="#">Feedback</a></li>
-<li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+<li class="nav-item ms-3">
 <a class="btn btn-purchase text-white" href="#">Purchase</a>
 </li>
 </ul>
@@ -182,9 +182,7 @@ body{
 </div>
 </nav>
 
-
 <div class="row align-items-center mt-5">
-
 
 <div class="col-lg-6 mb-4">
 <h1 class="hero-title">
@@ -196,22 +194,22 @@ Creating stunning web pages shouldn’t feel complicated.
 Start with beautifully crafted samples and customize them your way.
 </p>
 
-<button class="btn btn-learn text-white">
+<button class="btn btn-learn text-white mt-4">
 Explore More
 </button>
 </div>
 
-
 <div class="col-lg-5 offset-lg-1">
 <div class="signup-card">
 
-<h4 class="text-center mb-4 fw-bold">Join Our Community</h4>
+<h4 class="text-center">Join Our Community</h4>
 
 <form>
 <input type="email" class="form-control mb-3" placeholder="Your Email">
+
 <input type="password" class="form-control mb-3" placeholder="Your Password">
 
-<div class="form-check mb-3 text-start">
+<div class="form-check mb-3">
 <input class="form-check-input" type="checkbox">
 <label class="form-check-label">
 I agree to the terms & conditions
@@ -241,6 +239,5 @@ Already a member? <a href="#">Sign In</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
