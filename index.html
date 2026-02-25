@@ -1,180 +1,153 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chandana Groups</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landing Page</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
 <style>
 body{
-    background:#f8f6fb;
-    font-family:'Nunito', sans-serif;
+    background:#f2eeee;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-
-.hero-section{
-    background:linear-gradient(135deg,#2b1db6,#3a2ce0);
-    border-radius:25px;
-    padding:70px 60px;
-    margin:60px auto;
-    width:90%;
+.main-box{
+    background:#2417a5;
     color:white;
-    box-shadow:0 20px 40px rgba(0,0,0,0.15);
+    border-radius:20px;
+    padding:50px;
+    margin:40px auto;
+    width:92%;
 }
 
+.navbar-brand{
+    font-weight:600;
+    font-size:20px;
+}
 
 .nav-link{
     color:white !important;
-    font-weight:500;
-}
-.nav-link:hover{
-    opacity:0.8;
+    font-size:14px;
 }
 
-.btn-purchase{
-    background:#ff6b81;
-    border:none;
-    border-radius:30px;
-    padding:8px 20px;
+.purchase-btn{
+    background:#ff5c74;
+    color:white;
+    border-radius:25px;
+    padding:6px 20px;
 }
-
 
 .hero-title{
-    font-size:48px;
-    font-weight:700;
-    line-height:1.2;
+    font-size:46px;
+    font-weight:600;
 }
 
-.hero-text{
+.hero-desc{
     margin-top:20px;
-    font-size:16px;
-    max-width:480px;
-    opacity:0.9;
+    max-width:450px;
+    line-height:1.6;
 }
 
-.btn-learn{
-    background:#ff6b81;
-    border:none;
-    border-radius:30px;
-    padding:12px 26px;
-    margin-top:25px;
+.learn-btn{
+    background:#ff5c74;
+    border-radius:25px;
+    padding:10px 22px;
+    color:white;
+    margin-top:20px;
 }
-
 
 .signup-card{
-    background:white;
+    background:#f3f2f2;
     border-radius:25px;
     padding:35px;
-    box-shadow:0 15px 30px rgba(0,0,0,0.1);
+    color:black;
 }
 
 .form-control{
-    border-radius:30px;
-    padding:12px 18px;
-    background:#f1f1f1;
+    border-radius:25px;
+    background:#e6e4e4;
     border:none;
-}
-
-.btn-signin{
-    background:#2b1db6;
-    border:none;
-    border-radius:30px;
     padding:12px;
 }
 
-.btn-google{
-    background:linear-gradient(90deg,#6a5af9,#8b7dff);
-    border:none;
-    border-radius:30px;
-    padding:12px;
+.signin-btn{
+    background:#3c2db8;
+    color:white;
+    border-radius:25px;
+    padding:10px;
 }
 
-.divider{
-    text-align:center;
-    margin:15px 0;
-    font-size:13px;
-    color:#777;
+.google-btn{
+    background:linear-gradient(90deg,#5c6dfc,#6a3df0);
+    color:white;
+    border-radius:25px;
+    padding:10px;
 }
 
-.account{
-    font-size:13px;
-    text-align:center;
-    margin-top:15px;
+.small-text{
+    font-size:12px;
 }
 
-.account a{
-    color:#2b1db6;
-    font-weight:600;
-    text-decoration:none;
-}
-
-
-@media (max-width: 992px){
-    .hero-section{
-        padding:50px 40px;
-    }
-    .hero-title{
-        font-size:38px;
-    }
-}
-
-
-@media (max-width: 768px){
-    .hero-section{
-        padding:40px 25px;
-        text-align:center;
+@media(max-width:991px){
+    .main-box{
+        padding:35px 25px;
     }
 
     .hero-title{
-        font-size:30px;
+        font-size:34px;
     }
 
-    .hero-text{
-        margin:15px auto;
-        font-size:14px;
+    .hero-desc{
+        max-width:100%;
     }
 
     .signup-card{
         margin-top:30px;
-        padding:25px;
+    }
+}
+
+@media(max-width:576px){
+    .hero-title{
+        font-size:28px;
     }
 
     .navbar-nav{
         text-align:center;
-        margin-top:15px;
+    }
+
+    .purchase-btn{
+        margin-top:10px;
     }
 }
 </style>
 </head>
-
 <body>
 
-<div class="hero-section">
-
+<div class="main-box">
 
 <nav class="navbar navbar-expand-lg navbar-dark p-0">
 <div class="container-fluid p-0">
 
-<a class="navbar-brand fw-bold" href="#">Chandana Groups</a>
+<a class="navbar-brand" href="#">Chandana Groups</a>
 
-<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
 <span class="navbar-toggler-icon"></span>
 </button>
 
-<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+<div class="collapse navbar-collapse justify-content-end" id="navMenu">
 <ul class="navbar-nav align-items-center">
-<li class="nav-item"><a class="nav-link" href="#">Overview</a></li>
-<li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+<li class="nav-item"><a class="nav-link" href="#">OVERVIEW</a></li>
+<li class="nav-item"><a class="nav-link" href="#">Price</a></li>
 <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
 <li class="nav-item"><a class="nav-link" href="#">Feedback</a></li>
-<li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-<a class="btn btn-purchase text-white" href="#">Purchase</a>
+<li class="nav-item ms-lg-3">
+<a href="#" class="btn purchase-btn">Purchase</a>
 </li>
 </ul>
 </div>
@@ -182,54 +155,50 @@ body{
 </div>
 </nav>
 
-
 <div class="row align-items-center mt-5">
 
-
-<div class="col-lg-6 mb-4">
+<div class="col-lg-6">
 <h1 class="hero-title">
-Let’s Build Something <br> Beautiful Together
+Generate Awesome <br> Web Pages
 </h1>
 
-<p class="hero-text">
-Creating stunning web pages shouldn’t feel complicated.
-Start with beautifully crafted samples and customize them your way.
+<p class="hero-desc">
+The most important part of the Startup is the samples.
+The samples form a set of 25 usable pages you can use as is
+or you can add new blocks
 </p>
 
-<button class="btn btn-learn text-white">
-Explore More
-</button>
+<button class="btn learn-btn">Learn More</button>
 </div>
-
 
 <div class="col-lg-5 offset-lg-1">
 <div class="signup-card">
 
-<h4 class="text-center mb-4 fw-bold">Join Our Community</h4>
+<h4 class="text-center mb-4">Sign Up Now</h4>
 
-<form>
-<input type="email" class="form-control mb-3" placeholder="Your Email">
-<input type="password" class="form-control mb-3" placeholder="Your Password">
+<form method="POST" action="register.php">
 
-<div class="form-check mb-3 text-start">
-<input class="form-check-input" type="checkbox">
+<input type="email" name="email" class="form-control mb-3" placeholder="Your Email" required>
+
+<input type="password" name="password" class="form-control mb-3" placeholder="Your Password" required>
+
+<div class="form-check mb-3 small-text">
+<input class="form-check-input" type="checkbox" required>
 <label class="form-check-label">
-I agree to the terms & conditions
+I agree to the terms of services
 </label>
 </div>
 
-<button class="btn btn-signin w-100 text-white mb-3">
-Get Started
+<button type="submit" class="btn signin-btn w-100 mb-3">Sign IN</button>
+
+<div class="text-center small-text mb-2">or</div>
+
+<button type="button" class="btn google-btn w-100 mb-3">
+Login via Google
 </button>
 
-<div class="divider">or</div>
-
-<button class="btn btn-google w-100 text-white">
-Continue with Google
-</button>
-
-<div class="account">
-Already a member? <a href="#">Sign In</a>
+<div class="text-center small-text">
+Do you have an Account? <span style="color:green;">Sign In</span>
 </div>
 
 </form>
@@ -238,9 +207,9 @@ Already a member? <a href="#">Sign In</a>
 </div>
 
 </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
