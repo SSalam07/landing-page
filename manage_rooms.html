@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | GREENSPUN NATURESTAY RESORT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root { --forest-green: #1a3a32; --light-cream: #f8f9fa; }
+        body { background-color: var(--light-cream); font-family: 'Inter', sans-serif; }
+        .sidebar { width: 280px; height: 100vh; background: var(--forest-green); color: white; position: fixed; border-right: 1px solid rgba(255,255,255,0.1); }
+        .nav-link { color: rgba(255,255,255,0.7); margin: 5px 15px; border-radius: 8px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { background: #2d5a4c; color: white; }
+        .main-content { margin-left: 280px; padding: 40px; width: calc(100% - 280px); }
+        .card { border: none; border-radius: 15px; shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .room-img { width: 80px; height: 60px; object-fit: cover; }
+        .status-badge { font-size: 0.75rem; padding: 4px 8px; }
+        .action-btn { padding: 4px 8px; margin: 2px; }
+        .table-actions { white-space: nowrap; }
+        @media (max-width: 768px) {
+            .sidebar { position: relative; width: 100%; height: auto; }
+            .main-content { margin-left: 0; width: 100%; padding: 20px; }
+            .table-responsive { font-size: 0.875rem; }
+            .room-img { width: 60px; height: 45px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar d-flex flex-column">
+        <div class="p-4 border-bottom border-secondary text-center">
+            <img src="logo.jpeg" alt="GREENSPUN NATURESTAY RESORT" class="img-fluid mb-2" style="max-height: 80px;">
+            <h4 class="fw-bold mb-0 mt-2" style="color: #2d5a4c;">GREENSPUN</h4>
+            <small class="text-success tracking-widest" style="font-size: 0.65rem;">NATURESTAY RESORT</small>
+        </div>
+        <div class="nav flex-column mt-3 flex-grow-1">
+            <a href="manage_rooms.html" class="nav-link active"><i class="bi bi-door-open me-2"></i> Manage Rooms</a>
+            <a href="manage_gallery.html" class="nav-link"><i class="bi bi-images me-2"></i> Manage Gallery</a>
+            <a href="booking_details.html" class="nav-link"><i class="bi bi-calendar3 me-2"></i> Booking Details</a>
+            <a href="settings.html" class="nav-link"><i class="bi bi-gear me-2"></i> Settings</a>
+        </div>
+        <div class="p-3 border-top border-secondary">
+            <a href="#" class="nav-link text-danger" onclick="showLogoutModal(event)"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h2 class="fw-bold mb-0"><i class="bi bi-building me-2"></i>Manage Rooms</h2>
+            <div>
+                <button class="btn btn-outline-secondary me-2" onclick="exportRooms()">
+                    <i class="bi bi-download"></i> Export
+                </button>
+                <button class="btn btn-dark px-4" data-bs-toggle="modal" data-bs-target="#addRoomModal">
+                    <i class="bi bi-plus-circle"></i> Add New Room
+                </button>
+            </div>
+        </div>
+        
+        <!-- Room Stats -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card p-3 bg-white shadow-sm">
+                    <h6 class="text-muted mb-1"><i class="bi bi-building me-1"></i>Total Rooms</h6>
+                    <h3 class="mb-0">20</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 bg-white shadow-sm">
+                    <h6 class="text-muted mb-1"><i class="bi bi-check-circle me-1"></i>Available</h6>
+                    <h3 class="text-success mb-0">8</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 bg-white shadow-sm">
+                    <h6 class="text-muted mb-1"><i class="bi bi-person-fill me-1"></i>Occupied</h6>
+                    <h3 class="text-warning mb-0">12</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 bg-white shadow-sm">
+                    <h6 class="text-muted mb-1"><i class="bi bi-tools me-1"></i>Maintenance</h6>
+                    <h3 class="text-danger mb-0">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>All Rooms</h5>
+                <div class="d-flex gap-2">
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-secondary active" onclick="filterRooms('all')">All</button>
+                        <button class="btn btn-sm btn-outline-success" onclick="filterRooms('available')">Available</button>
+                        <button class="btn btn-sm btn-outline-warning" onclick="filterRooms('occupied')">Occupied</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="filterRooms('maintenance')">Maintenance</button>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" placeholder="Search rooms..." id="searchInput" onkeyup="searchRooms()" style="width: 200px;">
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle" id="roomsTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th><input type="checkbox" onchange="selectAll(this)"></th>
+                            <th>Image</th>
+                            <th>Room Name</th>
+                            <th>Type</th>
+                            <th>Price/Night</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roomsTableBody">
+                        <tr data-status="available">
+                            <td><input type="checkbox" class="room-checkbox"></td>
+                            <td><img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=100" class="rounded room-img" alt="Room"></td>
+                            <td><strong>Luxury Sea Villa</strong><br><small class="text-muted">Room 101</small></td>
+                            <td>Double Bed</td>
+                            <td>₹4,500</td>
+                            <td><span class="badge bg-success status-badge">Available</span></td>
+                            <td><small>Today</small></td>
+                            <td class="table-actions">
+                                <button class="btn btn-sm btn-outline-info action-btn" data-bs-toggle="modal" data-bs-target="#viewRoomModal" onclick="viewRoom(1)" title="View Details"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-primary action-btn" data-bs-toggle="modal" data-bs-target="#editRoomModal" onclick="editRoom(1)" title="Edit"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-warning action-btn" data-bs-toggle="modal" data-bs-target="#maintenanceModal" onclick="setMaintenance(1)" title="Set Maintenance"><i class="bi bi-tools"></i></button>
+                                <button class="btn btn-sm btn-outline-danger action-btn" data-bs-toggle="modal" data-bs-target="#deleteRoomModal" onclick="deleteRoom(1)" title="Delete"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm btn-outline-success action-btn" onclick="toggleStatus(1)" title="Toggle Status"><i class="bi bi-toggle-on"></i></button>
+                            </td>
+                        </tr>
+                        <tr data-status="occupied">
+                            <td><input type="checkbox" class="room-checkbox"></td>
+                            <td><img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=100" class="rounded room-img" alt="Room"></td>
+                            <td><strong>Deluxe Garden Room</strong><br><small class="text-muted">Room 102</small></td>
+                            <td>Queen Bed</td>
+                            <td>₹3,200</td>
+                            <td><span class="badge bg-warning status-badge">Occupied</span></td>
+                            <td><small>Yesterday</small></td>
+                            <td class="table-actions">
+                                <button class="btn btn-sm btn-outline-info action-btn" data-bs-toggle="modal" data-bs-target="#viewRoomModal" onclick="viewRoom(2)" title="View Details"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-primary action-btn" data-bs-toggle="modal" data-bs-target="#editRoomModal" onclick="editRoom(2)" title="Edit"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-warning action-btn" data-bs-toggle="modal" data-bs-target="#maintenanceModal" onclick="setMaintenance(2)" title="Set Maintenance"><i class="bi bi-tools"></i></button>
+                                <button class="btn btn-sm btn-outline-danger action-btn" data-bs-toggle="modal" data-bs-target="#deleteRoomModal" onclick="deleteRoom(2)" title="Delete"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm btn-outline-secondary action-btn" onclick="toggleStatus(2)" title="Toggle Status"><i class="bi bi-toggle-off"></i></button>
+                            </td>
+                        </tr>
+                        <tr data-status="available">
+                            <td><input type="checkbox" class="room-checkbox"></td>
+                            <td><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=100" class="rounded room-img" alt="Room"></td>
+                            <td><strong>Family Suite</strong><br><small class="text-muted">Room 103</small></td>
+                            <td>2 Queen Beds</td>
+                            <td>₹6,500</td>
+                            <td><span class="badge bg-success status-badge">Available</span></td>
+                            <td><small>Today</small></td>
+                            <td class="table-actions">
+                                <button class="btn btn-sm btn-outline-info action-btn" data-bs-toggle="modal" data-bs-target="#viewRoomModal" onclick="viewRoom(3)" title="View Details"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-primary action-btn" data-bs-toggle="modal" data-bs-target="#editRoomModal" onclick="editRoom(3)" title="Edit"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-warning action-btn" data-bs-toggle="modal" data-bs-target="#maintenanceModal" onclick="setMaintenance(3)" title="Set Maintenance"><i class="bi bi-tools"></i></button>
+                                <button class="btn btn-sm btn-outline-danger action-btn" data-bs-toggle="modal" data-bs-target="#deleteRoomModal" onclick="deleteRoom(3)" title="Delete"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm btn-outline-info action-btn" onclick="toggleStatus(3)" title="Toggle Status"><i class="bi bi-toggle-on"></i></button>
+                            </td>
+                        </tr>
+                        <tr data-status="available">
+                            <td><input type="checkbox" class="room-checkbox"></td>
+                            <td><img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=100" class="rounded room-img" alt="Room"></td>
+                            <td><strong>Standard AC Room</strong><br><small class="text-muted">Room 104</small></td>
+                            <td>Single Bed</td>
+                            <td>₹2,000</td>
+                            <td><span class="badge bg-success status-badge">Available</span></td>
+                            <td><small>2 days ago</small></td>
+                            <td class="table-actions">
+                                <button class="btn btn-sm btn-outline-info action-btn" data-bs-toggle="modal" data-bs-target="#viewRoomModal" onclick="viewRoom(4)" title="View Details"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-primary action-btn" data-bs-toggle="modal" data-bs-target="#editRoomModal" onclick="editRoom(4)" title="Edit"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-warning action-btn" data-bs-toggle="modal" data-bs-target="#maintenanceModal" onclick="setMaintenance(4)" title="Set Maintenance"><i class="bi bi-tools"></i></button>
+                                <button class="btn btn-sm btn-outline-danger action-btn" data-bs-toggle="modal" data-bs-target="#deleteRoomModal" onclick="deleteRoom(4)" title="Delete"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm btn-outline-info action-btn" onclick="toggleStatus(4)" title="Toggle Status"><i class="bi bi-toggle-on"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteSelected()">
+                        <i class="bi bi-trash"></i> Delete Selected
+                    </button>
+                </div>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title"><i class="bi bi-box-arrow-right me-2"></i>Logout</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="mb-0"><i class="bi bi-exclamation-triangle text-warning display-4"></i></p>
+                    <p class="mt-3">Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmLogout()">
+                        <i class="bi bi-box-arrow-right"></i> Yes, Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Room Details Modal -->
+    <div class="modal fade" id="viewRoomModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-info-circle me-2"></i>Room Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400" class="img-fluid rounded" alt="Room Image" id="viewRoomImage">
+                        </div>
+                        <div class="col-md-7">
+                            <h4 id="viewRoomName">Luxury Sea Villa</h4>
+                            <p class="text-muted" id="viewRoomNumber">Room 101</p>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Type:</strong></td>
+                                    <td id="viewRoomType">Double Bed</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Price:</strong></td>
+                                    <td id="viewRoomPrice">₹4,500/night</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status:</strong></td>
+                                    <td><span class="badge bg-success" id="viewRoomStatus">Available</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Amenities:</strong></td>
+                                    <td id="viewRoomAmenities">WiFi, AC, Hot Water</td>
+                                </tr>
+                            </table>
+                            <div class="mt-3">
+                                <h6>Description:</h6>
+                                <p id="viewRoomDescription">A beautiful sea-facing villa with modern amenities and comfortable bedding.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#editRoomModal" onclick="editFromView()">
+                        <i class="bi bi-pencil"></i> Edit Room
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Room Modal -->
+    <div class="modal fade" id="addRoomModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Add New Room</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRoomForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Room Name *</label>
+                                <input type="text" class="form-control" id="addRoomName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Room Number *</label>
+                                <input type="text" class="form-control" id="addRoomNumber" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Room Type *</label>
+                                <select class="form-select" id="addRoomType" required>
+                                    <option value="">Select Type</option>
+                                    <option>Single Bed</option>
+                                    <option>Double Bed</option>
+                                    <option>Queen Bed</option>
+                                    <option>King Bed</option>
+                                    <option>Family Suite</option>
+                                    <option>Bungalow</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Price per Night (₹) *</label>
+                                <input type="number" class="form-control" id="addRoomPrice" required min="0">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Room Image URL</label>
+                            <input type="url" class="form-control" id="addRoomImage" placeholder="https://...">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Amenities</label>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="WiFi" id="addWifi">
+                                        <label class="form-check-label" for="addWifi">WiFi</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="AC" id="addAC">
+                                        <label class="form-check-label" for="addAC">Air Conditioning</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Hot Water" id="addHotWater">
+                                        <label class="form-check-label" for="addHotWater">Hot Water</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Balcony" id="addBalcony">
+                                        <label class="form-check-label" for="addBalcony">Balcony</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="TV" id="addTV">
+                                        <label class="form-check-label" for="addTV">TV</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Mini Bar" id="addMiniBar">
+                                        <label class="form-check-label" for="addMiniBar">Mini Bar</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Kitchen" id="addKitchen">
+                                        <label class="form-check-label" for="addKitchen">Kitchen</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Sea View" id="addSeaView">
+                                        <label class="form-check-label" for="addSeaView">Sea View</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Room Service" id="addRoomService">
+                                        <label class="form-check-label" for="addRoomService">Room Service</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="addRoomDescription" rows="3" placeholder="Describe the room..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" onclick="saveRoom()">
+                        <i class="bi bi-check-circle"></i> Save Room
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Room Modal -->
+    <div class="modal fade" id="editRoomModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Edit Room</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editRoomForm">
+                        <input type="hidden" id="editRoomId">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Room Name *</label>
+                                <input type="text" class="form-control" id="editRoomName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Room Number *</label>
+                                <input type="text" class="form-control" id="editRoomNumber" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Room Type *</label>
+                                <select class="form-select" id="editRoomType" required>
+                                    <option value="">Select Type</option>
+                                    <option>Single Bed</option>
+                                    <option>Double Bed</option>
+                                    <option>Queen Bed</option>
+                                    <option>King Bed</option>
+                                    <option>Family Suite</option>
+                                    <option>Bungalow</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Price per Night (₹) *</label>
+                                <input type="number" class="form-control" id="editRoomPrice" required min="0">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Room Image URL</label>
+                            <input type="url" class="form-control" id="editRoomImage">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="editRoomDescription" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="updateRoom()">
+                        <i class="bi bi-check-circle"></i> Update Room
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance Modal -->
+    <div class="modal fade" id="maintenanceModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title"><i class="bi bi-tools me-2"></i>Set Maintenance Mode</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to put this room under maintenance?</p>
+                    <input type="hidden" id="maintenanceRoomId">
+                    <div class="mb-3">
+                        <label class="form-label">Reason for Maintenance</label>
+                        <textarea class="form-control" rows="3" placeholder="Describe the maintenance issue..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning" onclick="confirmMaintenance()">
+                        <i class="bi bi-tools"></i> Set Under Maintenance
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteRoomModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center"><i class="bi bi-trash display-1 text-danger"></i></p>
+                    <p class="text-center">Are you sure you want to delete this room?</p>
+                    <p class="text-muted text-center">This action cannot be undone. All booking data associated with this room will also be deleted.</p>
+                    <input type="hidden" id="deleteRoomId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <i class="bi bi-trash"></i> Delete Room
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Alert -->
+    <div class="alert alert-success position-fixed top-0 end-0 m-3" id="successAlert" style="display: none; z-index: 9999;">
+        <i class="bi bi-check-circle-fill me-2"></i><span id="successMessage">Success!</span>
+    </div>
+
+    <!-- Error Alert -->
+    <div class="alert alert-danger position-fixed top-0 end-0 m-3" id="errorAlert" style="display: none; z-index: 9999;">
+        <i class="bi bi-exclamation-circle-fill me-2"></i><span id="errorMessage">Error!</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show logout confirmation modal
+        function showLogoutModal(event) {
+            event.preventDefault();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('logoutModal')).show();
+        }
+        
+        // Confirm logout
+        function confirmLogout() {
+            window.location.href = 'login.html';
+        }
+
+        // Room data storage
+        let rooms = [
+            { id: 1, name: 'Luxury Sea Villa', number: 'Room 101', type: 'Double Bed', price: 4500, status: 'Available', amenities: 'WiFi, AC, Hot Water, Sea View', image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400', description: 'A beautiful sea-facing villa with modern amenities and comfortable bedding.', updated: 'Today' },
+            { id: 2, name: 'Deluxe Garden Room', number: 'Room 102', type: 'Queen Bed', price: 3200, status: 'Occupied', amenities: 'WiFi, AC, Balcony', image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400', description: 'A peaceful room overlooking the garden with modern amenities.', updated: 'Yesterday' },
+            { id: 3, name: 'Family Suite', number: 'Room 103', type: '2 Queen Beds', price: 6500, status: 'Available', amenities: 'WiFi, AC, Kitchen, TV', image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400', description: 'Spacious suite perfect for families with a separate living area.', updated: 'Today' },
+            { id: 4, name: 'Standard AC Room', number: 'Room 104', type: 'Single Bed', price: 2000, status: 'Available', amenities: 'WiFi, AC', image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=400', description: 'Comfortable and affordable room with essential amenities.', updated: '2 days ago' }
+        ];
+
+        // View Room Details
+        function viewRoom(id) {
+            const room = rooms.find(r => r.id === id);
+            if (room) {
+                document.getElementById('viewRoomImage').src = room.image;
+                document.getElementById('viewRoomName').textContent = room.name;
+                document.getElementById('viewRoomNumber').textContent = room.number;
+                document.getElementById('viewRoomType').textContent = room.type;
+                document.getElementById('viewRoomPrice').textContent = '₹' + room.price.toLocaleString() + '/night';
+                document.getElementById('viewRoomStatus').textContent = room.status;
+                document.getElementById('viewRoomStatus').className = 'badge ' + (room.status === 'Available' ? 'bg-success' : room.status === 'Occupied' ? 'bg-warning' : 'bg-danger');
+                document.getElementById('viewRoomAmenities').textContent = room.amenities;
+                document.getElementById('viewRoomDescription').textContent = room.description;
+            }
+        }
+
+        // Edit Room function
+        function editRoom(id) {
+            const room = rooms.find(r => r.id === id);
+            if (room) {
+                document.getElementById('editRoomId').value = room.id;
+                document.getElementById('editRoomName').value = room.name;
+                document.getElementById('editRoomNumber').value = room.number;
+                document.getElementById('editRoomType').value = room.type;
+                document.getElementById('editRoomPrice').value = room.price;
+                document.getElementById('editRoomImage').value = room.image;
+                document.getElementById('editRoomDescription').value = room.description;
+            }
+        }
+
+        // Edit from View
+        function editFromView() {
+            const id = document.getElementById('editRoomId').value;
+            editRoom(id);
+        }
+
+        // Update Room function
+        function updateRoom() {
+            const id = document.getElementById('editRoomId').value;
+            const roomIndex = rooms.findIndex(r => r.id == id);
+            if (roomIndex > -1) {
+                rooms[roomIndex].name = document.getElementById('editRoomName').value;
+                rooms[roomIndex].number = document.getElementById('editRoomNumber').value;
+                rooms[roomIndex].type = document.getElementById('editRoomType').value;
+                rooms[roomIndex].price = document.getElementById('editRoomPrice').value;
+                rooms[roomIndex].image = document.getElementById('editRoomImage').value;
+                rooms[roomIndex].description = document.getElementById('editRoomDescription').value;
+                rooms[roomIndex].updated = 'Just now';
+                showSuccess('Room updated successfully!');
+                bootstrap.Modal.getInstance(document.getElementById('editRoomModal')).hide();
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+
+        // Delete Room function
+        function deleteRoom(id) {
+            document.getElementById('deleteRoomId').value = id;
+        }
+
+        // Confirm Delete function
+        function confirmDelete() {
+            const id = document.getElementById('deleteRoomId').value;
+            rooms = rooms.filter(r => r.id != id);
+            showSuccess('Room deleted successfully!');
+            bootstrap.Modal.getInstance(document.getElementById('deleteRoomModal')).hide();
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        // Set Maintenance
+        function setMaintenance(id) {
+            document.getElementById('maintenanceRoomId').value = id;
+        }
+
+        // Confirm Maintenance
+        function confirmMaintenance() {
+            const id = document.getElementById('maintenanceRoomId').value;
+            const room = rooms.find(r => r.id == id);
+            if (room) {
+                room.status = 'Maintenance';
+                room.updated = 'Just now';
+                showSuccess('Room set under maintenance!');
+                bootstrap.Modal.getInstance(document.getElementById('maintenanceModal')).hide();
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+
+        // Save new Room function
+        function saveRoom() {
+            const form = document.getElementById('addRoomForm');
+            if (form.checkValidity()) {
+                const newId = Math.max(...rooms.map(r => r.id)) + 1;
+                const amenities = [];
+                if (document.getElementById('addWifi').checked) amenities.push('WiFi');
+                if (document.getElementById('addAC').checked) amenities.push('AC');
+                if (document.getElementById('addHotWater').checked) amenities.push('Hot Water');
+                if (document.getElementById('addBalcony').checked) amenities.push('Balcony');
+                if (document.getElementById('addTV').checked) amenities.push('TV');
+                if (document.getElementById('addMiniBar').checked) amenities.push('Mini Bar');
+                if (document.getElementById('addKitchen').checked) amenities.push('Kitchen');
+                if (document.getElementById('addSeaView').checked) amenities.push('Sea View');
+                if (document.getElementById('addRoomService').checked) amenities.push('Room Service');
+
+                rooms.push({
+                    id: newId,
+                    name: document.getElementById('addRoomName').value,
+                    number: document.getElementById('addRoomNumber').value,
+                    type: document.getElementById('addRoomType').value,
+                    price: document.getElementById('addRoomPrice').value,
+                    status: 'Available',
+                    amenities: amenities.join(', '),
+                    image: document.getElementById('addRoomImage').value || 'https://via.placeholder.com/400',
+                    description: document.getElementById('addRoomDescription').value,
+                    updated: 'Just now'
+                });
+                showSuccess('Room added successfully!');
+                bootstrap.Modal.getInstance(document.getElementById('addRoomModal')).hide();
+                form.reset();
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                form.reportValidity();
+            }
+        }
+
+        // Toggle Room Status function
+        function toggleStatus(id) {
+            const room = rooms.find(r => r.id === id);
+            if (room) {
+                room.status = room.status === 'Available' ? 'Occupied' : 'Available';
+                room.updated = 'Just now';
+                showSuccess('Room status updated to ' + room.status + '!');
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+
+        // Filter Rooms
+        function filterRooms(filter) {
+            const rows = document.querySelectorAll('#roomsTableBody tr');
+            rows.forEach(row => {
+                const status = row.getAttribute('data-status');
+                if (filter === 'all' || status === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Update button states
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(filter) || (filter === 'all' && btn.textContent === 'All')) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Search Rooms
+        function searchRooms() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const rows = document.querySelectorAll('#roomsTableBody tr');
+            
+            rows.forEach(row => {
+                const name = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const type = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                if (name.includes(filter) || type.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Select All
+        function selectAll(source) {
+            const checkboxes = document.querySelectorAll('.room-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = source.checked;
+            });
+        }
+
+        // Delete Selected
+        function deleteSelected() {
+            const checkboxes = document.querySelectorAll('.room-checkbox:checked');
+            if (checkboxes.length === 0) {
+                showError('Please select at least one room to delete.');
+                return;
+            }
+            if (confirm('Are you sure you want to delete ' + checkboxes.length + ' room(s)?')) {
+                const indices = Array.from(checkboxes).map(cb => cb.closest('tr').rowIndex);
+                showSuccess(checkboxes.length + ' room(s) deleted successfully!');
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+
+        // Export Rooms
+        function exportRooms() {
+            showSuccess('Room data exported successfully!');
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            document.getElementById('successMessage').textContent = message;
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        // Show error message
+        function showError(message) {
+            const alert = document.getElementById('errorAlert');
+            document.getElementById('errorMessage').textContent = message;
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
